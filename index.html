@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap" rel="stylesheet">
     <link href="css/reset.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Odd Duck</title>
 </head>
 <body>
@@ -16,18 +17,22 @@
         <hr>
     </header>
     <main>
-        <section id="container">
-            <img src="" alt="" id="img1"  class="colums">
-            <img src="" alt="" id="img2"  class="colums">
-            <img src="" alt="" id="img3"  class="colums">
+        <section id="images" class="container">
+            <img src="" alt="" id="img1" class="colums">
+            <img src="" alt="" id="img2" class="colums">
+            <img src="" alt="" id="img3" class="colums">
         </section>
-        <section>
-            <button type="button" name="button" id="mostrarResultado" hidden>Ver resultados</button>
+        <section id="resultados">
+            <button type="button" name="button" id="mostrarResultados" hidden>Ver resultados</button> 
             <button type="button" name="reset" id="reset" hidden>Reiniciar</button>
         </section>
-        <section id="resultados"></section>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+        <!-- <section id="resultados"></section> -->
     </main>
     <footer></footer>
-<script src="apps.js"></script>
+<script src="js/apps.js"></script>
+
 </body>
 </html>
