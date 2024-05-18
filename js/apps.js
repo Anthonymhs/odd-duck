@@ -15,28 +15,28 @@ function Products(nombre, path){
 
 (function crearAlbum() {
     for (let i = 0; i < nombreProductos.length; i++) {
-        let producto = new Products(nombreProductos[i], 'imgs/' + nombreProductos[i] + '.jpg');
-        state.totalProducto.push(producto);
+        let producto = new Products(nombreProductos[i], 'img/' + nombreProductos[i] + '.jpg');
+        state.totalProduct.push(producto);
     }
 })();
 
 const productosElegidos = {
-    totalClick:0,
-    rondas:25,
+    totalClick: 0,
+    rondas: 25,
     objIzq: null,
     objCent: null,
-    obtDer: null,
+    objDer: null,
 
     elemIzq: document.getElementById('img1'),
     elemCent: document.getElementById('img2'),
     elemDer: document.getElementById('img3'),
-    elemsImage: document.getElementById8('images'),
+    elemsImage: document.getElementById('images'),
     elemResultado: document.getElementById('resultados'),
     buttonResultados: document.getElementById('mostrarResultados'),
     buttonReset: document.getElementById('reset'),
 
     getRandomIndex: function () {
-        return Math.floor(Math.random()*nombreProductos.length);
+        return Math.floor(Math.random() * nombreProductos.length);
     },
 
     mostrarImagenes: function () {
@@ -44,13 +44,14 @@ const productosElegidos = {
         productosElegidos.objCent = state.totalProduct[productosElegidos.getRandomIndex()];
         productosElegidos.objDer = state.totalProduct[productosElegidos.getRandomIndex()];
 
-        if( productosElegidos.objIzq === productosElegidos.objCent || productosElegidos.objIzq === productosElegidos.objDer || productosElegidos.objCent === productosElegidos.objDer){
+        if (productosElegidos.objIzq === productosElegidos.objCent || productosElegidos.objIzq === productosElegidos.objDer || productosElegidos.objCent === productosElegidos.objDer) {
             productosElegidos.mostrarImagenes();
+            // return;
         }
 
-        productosElegidos.objIzq.views += 1 ;
-        productosElegidos.objCent.views += 1 ;
-        productosElegidos.objDer.views += 1 ;
+        productosElegidos.objIzq.views += 1;
+        productosElegidos.objCent.views += 1;
+        productosElegidos.objDer.views += 1;
 
         productosElegidos.elemIzq.src = productosElegidos.objIzq.path;
         productosElegidos.elemIzq.id = productosElegidos.objIzq.nombre;
@@ -62,53 +63,56 @@ const productosElegidos = {
         productosElegidos.elemDer.id = productosElegidos.objDer.nombre;
     },
 
-    cuentaClicks: function(losIds){
-        for(let i=0; i<state.totalProduct.length; i++){
-            if(state.totalProduct[i].nombre === losIds){
+    cuentaClicks: function (losIds) {
+        for (let i = 0; i < state.totalProduct.length; i++) {
+            if (state.totalProduct[i].nombre === losIds) {
                 state.totalProduct[i].contador += 1;
-                this.totalClick += 1 ;
+                this.totalClick += 1;
             }
         }
     },
 
-    mostrarResultados: function() {
+    mostrarResultados: function () {
         const lista = document.createElement('ul');
-        for ( let i=0; i<state.totalProduct.length; i++){
-            const primerLi=document.childElement('li');
-            const info = state.totalProduct[i].nombre+ ' tiene' + state.totalProduct[i].contador + ' votos';
-            primerli.textContent=info;
+        for (let i = 0; i < state.totalProduct.length; i++) {
+            const primerLi = document.createElement('li');
+            const info = state.totalProduct[i].nombre + ' tiene ' + state.totalProduct[i].contador + ' votos';
+            primerLi.textContent = info;
             lista.appendChild(primerLi);
         }
-        const segundoLi=document.childElement('li');
-        segundoLi.textContent= 'Total de clicks: '+ this.totalClicks;
+        const segundoLi = document.createElement('li');
+        segundoLi.textContent = 'Total de clicks: ' + this.totalClick;
         lista.appendChild(segundoLi);
         this.elemResultado.appendChild(lista);
     },
-
-    buttonMostrar: function() {
-        this.buttonResultado.hidden = false;
-        this.buttonResultado.addEventListener('click', function() {
+    buttonMostrar: function () {
+        this.buttonResultados.hidden = false;
+        this.buttonResultados.addEventListener('click', function () {
             productosElegidos.buttonReset.hidden = false;
-            productosElegidos.buttonResultado.hidden = true;
+            productosElegidos.buttonResultados.hidden = true;
             productosElegidos.mostrarResultados();
-    
-            productosElegidos.buttonReset.addEventListener('click', function() {
+
+            productosElegidos.buttonReset.addEventListener('click', function () {
                 productosElegidos.buttonReset.hidden = true;
                 location.reload();
             });
         });
     },
-    onClick: function (event) {
-        if (event.target.id === productosElegidos.objIzq.nombre || event.target.id === productosElegidos.objCent.nombre || event.target.id === productosElegidos.objDer.nombre);
-        productosElegidos.cuentaClicks(event.target.id);
 
-        if( productosElegidos.totalClick % productosElegidos.rondas === 0){
-            productosElegidos.elemsImage.removeEventListener('click',productosElegidos.onClick);
-            productosElegidos.buttomMostrar();
+    onClick: function (event) {
+        if (event.target.id === productosElegidos.objIzq.nombre || event.target.id === productosElegidos.objCent.nombre || event.target.id === productosElegidos.objDer.nombre) {
+            productosElegidos.cuentaClicks(event.target.id);
+
+            if (productosElegidos.totalClick % productosElegidos.rondas === 0) {
+                productosElegidos.elemsImage.removeEventListener('click', productosElegidos.onClick);
+                productosElegidos.buttonMostrar();
+            }
+            productosElegidos.mostrarImagenes();
+        }else {
+            alert ("haz click en la imagen");
         }
-        productosElegidos.mostrarImagenes();
     }
-    
 };
+
 productosElegidos.elemsImage.addEventListener('click',productosElegidos.onClick);
-productosElegidos.mostrarImages();
+productosElegidos.mostrarImagenes();

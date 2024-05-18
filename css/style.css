@@ -8,6 +8,34 @@ body {
     font-style: normal;
 }
 
+ff-secondary {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 h1 {
     font-size: 3rem;
+    text-align: center;
+}
+main .container {
+    width: 80vw;
+    height: 80hv;
+    border: 3px solid black;
+    margin: 3vh auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+main .container img {
+    display: block;
+    width: 100px;
+    height: auto;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #000;
+    margin: 20px 0;
 }
