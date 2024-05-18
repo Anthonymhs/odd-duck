@@ -22,7 +22,7 @@ function Products(nombre, path){
 
 const productosElegidos = {
     totalClick: 0,
-    rondas: 2,
+    rondas: 10,
     objIzq: null,
     objCent: null,
     objDer: null,
@@ -63,14 +63,14 @@ const productosElegidos = {
         productosElegidos.elemDer.id = productosElegidos.objDer.nombre;
     },
 
-    cuentaClicks: function (losIds) {
-        for (let i = 0; i < state.totalProduct.length; i++) {
-            if (state.totalProduct[i].nombre === losIds) {
-                state.totalProduct[i].contador += 1;
-                this.totalClick += 1;
-            }
+cuentaClicks: function (losIds) {
+    for (let i = 0; i < state.totalProduct.length; i++) {
+        if (state.totalProduct[i].nombre === losIds) {
+            state.totalProduct[i].contador += 1;
+            this.totalClick += 1;
         }
-    },
+    }
+},
 
     mostrarResultados: function () {
         const lista = document.createElement('ul');
@@ -90,13 +90,26 @@ const productosElegidos = {
 mostrarChart: function () {
 const ctx = document.getElementById('myChart');
 
-    let chart =   new Chart(ctx, {
+    const mostrarViews = [];
+    const mostrarClicks = [];
+
+    for (let i = 0; i < state.totalProduct.length; i++) {
+        mostrarViews.push(state.totalProduct[i].views);
+        mostrarClicks.push(state.totalProduct[i].clicks);
+    }
+
+    let chart =  new Chart(ctx, {
         type: 'bar',
         data: {
-        labels: [nombreProductos],
+        labels: nombreProductos,
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            label: 'Views',
+            data: mostrarViews,
+            borderWidth: 1
+        },
+        {
+            label: 'Clicks',
+            data: mostrarClicks,
             borderWidth: 1
         }]
         },
@@ -107,7 +120,7 @@ const ctx = document.getElementById('myChart');
             beginAtZero: true
             }
         }
-        }
+    }
     });
 },
 
