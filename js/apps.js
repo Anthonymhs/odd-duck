@@ -1,6 +1,6 @@
 'use strict';
 
-const nombreProductos = ['boots','bathroom','breakfast','bubblegum','chair','dog-duck','tauntaun','scissors','water-can','wine-glass','bag','banana','cthulhu','dragon','pen','pet-sweep','scissors','shark','sweep','tauntaun','unicorn','water-can','wine-glass'];
+const nombreProductos = ['boots','bathroom','breakfast','bubblegum','chair','dog-duck','tauntaun','scissors','water-can','wine-glass','bag','banana','cthulhu','dragon','pen','pet-sweep','scissors','shark','tauntaun','unicorn','water-can','wine-glass'];
 
 const state = {
     totalProduct: [],
@@ -22,7 +22,7 @@ function Products(nombre, path){
 
 const productosElegidos = {
     totalClick: 0,
-    rondas: 25,
+    rondas: 2,
     objIzq: null,
     objCent: null,
     objDer: null,
@@ -84,7 +84,33 @@ const productosElegidos = {
         segundoLi.textContent = 'Total de clicks: ' + this.totalClick;
         lista.appendChild(segundoLi);
         this.elemResultado.appendChild(lista);
+        productosElegidos.mostrarChart();
     },
+
+mostrarChart: function () {
+const ctx = document.getElementById('myChart');
+
+    let chart =   new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: [nombreProductos],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            borderWidth: 1
+        }]
+        },
+        options: {
+            indexAxis: 'y',
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+},
+
     buttonMostrar: function () {
         this.buttonResultados.hidden = false;
         this.buttonResultados.addEventListener('click', function () {
@@ -116,3 +142,4 @@ const productosElegidos = {
 
 productosElegidos.elemsImage.addEventListener('click',productosElegidos.onClick);
 productosElegidos.mostrarImagenes();
+
