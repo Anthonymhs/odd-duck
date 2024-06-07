@@ -1,12 +1,12 @@
 'use strict';
 
-const nombreProductos = ['boots','bathroom','breakfast','bubblegum','chair','dog-duck','tauntaun','scissors','water-can','wine-glass','bag','banana','cthulhu','dragon','pen','pet-sweep','scissors','shark','tauntaun','unicorn','water-can','wine-glass'];
+const nombreProductos = ['boots', 'bathroom', 'breakfast', 'bubblegum', 'chair', 'dog-duck', 'tauntaun', 'scissors', 'water-can', 'wine-glass', 'bag', 'banana', 'cthulhu', 'dragon', 'pen', 'pet-sweep', 'shark', 'unicorn'];
 
 const state = {
     totalProduct: [],
 };
 
-function Products(nombre, path){
+function Products(nombre, path) {
     this.nombre = nombre;
     this.path = path;
     this.contador = 0;
@@ -14,10 +14,10 @@ function Products(nombre, path){
 }
 
 (function crearAlbum() {
-    for (let i = 0; i < nombreProductos.length; i++) {
-        let producto = new Products(nombreProductos[i], 'img/' + nombreProductos[i] + '.jpg');
+    nombreProductos.forEach((productoNombre) => {
+        let producto = new Products(productoNombre, 'img/' + productoNombre + '.jpg');
         state.totalProduct.push(producto);
-    }
+    });
 })();
 
 const productosElegidos = {
@@ -40,119 +40,118 @@ const productosElegidos = {
     },
 
     mostrarImagenes: function () {
-        productosElegidos.objIzq = state.totalProduct[productosElegidos.getRandomIndex()];
-        productosElegidos.objCent = state.totalProduct[productosElegidos.getRandomIndex()];
-        productosElegidos.objDer = state.totalProduct[productosElegidos.getRandomIndex()];
-
-        if (productosElegidos.objIzq === productosElegidos.objCent || productosElegidos.objIzq === productosElegidos.objDer || productosElegidos.objCent === productosElegidos.objDer) {
-            productosElegidos.mostrarImagenes();
-            // return;
+        let indicesUnicos = new Set();
+        while (indicesUnicos.size < 3) {
+            indicesUnicos.add(this.getRandomIndex());
         }
+        let indices = Array.from(indicesUnicos);
 
-        productosElegidos.objIzq.views += 1;
-        productosElegidos.objCent.views += 1;
-        productosElegidos.objDer.views += 1;
+        this.objIzq = state.totalProduct[indices[0]];
+        this.objCent = state.totalProduct[indices[1]];
+        this.objDer = state.totalProduct[indices[2]];
 
-        productosElegidos.elemIzq.src = productosElegidos.objIzq.path;
-        productosElegidos.elemIzq.id = productosElegidos.objIzq.nombre;
+        this.objIzq.views += 1;
+        this.objCent.views += 1;
+        this.objDer.views += 1;
 
-        productosElegidos.elemCent.src = productosElegidos.objCent.path;
-        productosElegidos.elemCent.id = productosElegidos.objCent.nombre;
+        this.elemIzq.src = this.objIzq.path;
+        this.elemIzq.id = this.objIzq.nombre;
 
-        productosElegidos.elemDer.src = productosElegidos.objDer.path;
-        productosElegidos.elemDer.id = productosElegidos.objDer.nombre;
+        this.elemCent.src = this.objCent.path;
+        this.elemCent.id = this.objCent.nombre;
+
+        this.elemDer.src = this.objDer.path;
+        this.elemDer.id = this.objDer.nombre;
     },
 
-cuentaClicks: function (losIds) {
-    for (let i = 0; i < state.totalProduct.length; i++) {
-        if (state.totalProduct[i].nombre === losIds) {
-            state.totalProduct[i].contador += 1;
-            this.totalClick += 1;
-        }
-    }
-},
+    cuentaClicks: function (losIds) {
+        state.totalProduct.forEach((producto) => {
+            if (producto.nombre === losIds) {
+                producto.contador += 1;
+                this.totalClick += 1;
+            }
+        });
+    },
 
     mostrarResultados: function () {
         const lista = document.createElement('ul');
-        for (let i = 0; i < state.totalProduct.length; i++) {
+        state.totalProduct.forEach((producto) => {
             const primerLi = document.createElement('li');
-            const info = state.totalProduct[i].nombre + ' tiene ' + state.totalProduct[i].contador + ' votos';
+            const info = `${producto.nombre} tiene ${producto.contador} votos y ${producto.views} vistas`;
             primerLi.textContent = info;
             lista.appendChild(primerLi);
-        }
+        });
         const segundoLi = document.createElement('li');
-        segundoLi.textContent = 'Total de clicks: ' + this.totalClick;
+        segundoLi.textContent = 'Total de clics: ' + this.totalClick;
         lista.appendChild(segundoLi);
         this.elemResultado.appendChild(lista);
-        productosElegidos.mostrarChart();
+        this.mostrarChart();
     },
 
-mostrarChart: function () {
-const ctx = document.getElementById('myChart');
+    mostrarChart: function () {
+        const ctx = document.getElementById('myChart');
+        const mostrarViews = [];
+        const mostrarClicks = [];
 
-    const mostrarViews = [];
-    const mostrarClicks = [];
+        state.totalProduct.forEach((producto) => {
+            mostrarViews.push(producto.views);
+            mostrarClicks.push(producto.contador);
+        });
 
-    for (let i = 0; i < state.totalProduct.length; i++) {
-        mostrarViews.push(state.totalProduct[i].views);
-        mostrarClicks.push(state.totalProduct[i].clicks);
-    }
-
-    let chart =  new Chart(ctx, {
-        type: 'bar',
-        data: {
-        labels: nombreProductos,
-        datasets: [{
-            label: 'Views',
-            data: mostrarViews,
-            borderWidth: 1
-        },
-        {
-            label: 'Clicks',
-            data: mostrarClicks,
-            borderWidth: 1
-        }]
-        },
-        options: {
-            indexAxis: 'y',
-        scales: {
-            y: {
-            beginAtZero: true
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: nombreProductos,
+                datasets: [{
+                    label: 'Views',
+                    data: mostrarViews,
+                    borderWidth: 1
+                },
+                {
+                    label: 'Clicks',
+                    data: mostrarClicks,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
-        }
-    }
-    });
-},
+        });
+    },
 
     buttonMostrar: function () {
         this.buttonResultados.hidden = false;
-        this.buttonResultados.addEventListener('click', function () {
-            productosElegidos.buttonReset.hidden = false;
-            productosElegidos.buttonResultados.hidden = true;
-            productosElegidos.mostrarResultados();
+        this.buttonResultados.addEventListener('click', () => {
+            this.buttonReset.hidden = false;
+            this.buttonResultados.hidden = true;
+            this.mostrarResultados();
 
-            productosElegidos.buttonReset.addEventListener('click', function () {
-                productosElegidos.buttonReset.hidden = true;
+            this.buttonReset.addEventListener('click', () => {
+                this.buttonReset.hidden = true;
                 location.reload();
             });
         });
     },
 
     onClick: function (event) {
-        if (event.target.id === productosElegidos.objIzq.nombre || event.target.id === productosElegidos.objCent.nombre || event.target.id === productosElegidos.objDer.nombre) {
-            productosElegidos.cuentaClicks(event.target.id);
+        if (event.target.id === this.objIzq.nombre || event.target.id === this.objCent.nombre || event.target.id === this.objDer.nombre) {
+            this.cuentaClicks(event.target.id);
 
-            if (productosElegidos.totalClick % productosElegidos.rondas === 0) {
-                productosElegidos.elemsImage.removeEventListener('click', productosElegidos.onClick);
-                productosElegidos.buttonMostrar();
+            if (this.totalClick % this.rondas === 0) {
+                this.elemsImage.removeEventListener('click', this.onClick.bind(this));
+                this.buttonMostrar();
             }
-            productosElegidos.mostrarImagenes();
-        }else {
-            alert ("haz click en la imagen");
+            this.mostrarImagenes();
+        } else {
+            alert("Haz clic en la imagen");
         }
     }
 };
 
-productosElegidos.elemsImage.addEventListener('click',productosElegidos.onClick);
+productosElegidos.elemsImage.addEventListener('click', productosElegidos.onClick.bind(productosElegidos));
 productosElegidos.mostrarImagenes();
-
