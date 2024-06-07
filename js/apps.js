@@ -1,6 +1,6 @@
 'use strict';
 
-const nombreProductos = ['boots', 'bathroom', 'breakfast', 'bubblegum', 'chair', 'dog-duck', 'tauntaun', 'scissors', 'water-can', 'wine-glass', 'bag', 'banana', 'cthulhu', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'tauntaun', 'unicorn', 'water-can', 'wine-glass'];
+const nombreProductos = ['boots', 'bathroom', 'breakfast', 'bubblegum', 'chair', 'dog-duck', 'tauntaun', 'scissors', 'water-can', 'wine-glass', 'bag', 'banana', 'cthulhu', 'dragon', 'pen', 'pet-sweep', 'shark', 'unicorn'];
 
 const state = {
     totalProduct: [],
@@ -14,10 +14,10 @@ function Products(nombre, path) {
 }
 
 (function crearAlbum() {
-    for (let i = 0; i < nombreProductos.length; i++) {
-        let producto = new Products(nombreProductos[i], 'img/' + nombreProductos[i] + '.jpg');
+    nombreProductos.forEach((productoNombre) => {
+        let producto = new Products(productoNombre, 'img/' + productoNombre + '.jpg');
         state.totalProduct.push(producto);
-    }
+    });
 })();
 
 const productosElegidos = {
@@ -65,22 +65,22 @@ const productosElegidos = {
     },
 
     cuentaClicks: function (losIds) {
-        for (let i = 0; i < state.totalProduct.length; i++) {
-            if (state.totalProduct[i].nombre === losIds) {
-                state.totalProduct[i].contador += 1;
+        state.totalProduct.forEach((producto) => {
+            if (producto.nombre === losIds) {
+                producto.contador += 1;
                 this.totalClick += 1;
             }
-        }
+        });
     },
 
     mostrarResultados: function () {
         const lista = document.createElement('ul');
-        for (let i = 0; i < state.totalProduct.length; i++) {
+        state.totalProduct.forEach((producto) => {
             const primerLi = document.createElement('li');
-            const info = state.totalProduct[i].nombre + ' tiene ' + state.totalProduct[i].contador + ' votos y ' + state.totalProduct[i].views + ' vistas';
+            const info = `${producto.nombre} tiene ${producto.contador} votos y ${producto.views} vistas`;
             primerLi.textContent = info;
             lista.appendChild(primerLi);
-        }
+        });
         const segundoLi = document.createElement('li');
         segundoLi.textContent = 'Total de clics: ' + this.totalClick;
         lista.appendChild(segundoLi);
@@ -90,14 +90,13 @@ const productosElegidos = {
 
     mostrarChart: function () {
         const ctx = document.getElementById('myChart');
-
         const mostrarViews = [];
         const mostrarClicks = [];
 
-        for (let i = 0; i < state.totalProduct.length; i++) {
-            mostrarViews.push(state.totalProduct[i].views);
-            mostrarClicks.push(state.totalProduct[i].contador);
-        }
+        state.totalProduct.forEach((producto) => {
+            mostrarViews.push(producto.views);
+            mostrarClicks.push(producto.contador);
+        });
 
         let chart = new Chart(ctx, {
             type: 'bar',
